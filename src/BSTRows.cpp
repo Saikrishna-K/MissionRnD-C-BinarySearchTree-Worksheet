@@ -88,6 +88,7 @@ int* BSTRighttoLeftRows(struct node* root)
 	{
 		nextLevel(root, arr, &index, i, 0);
 	}
+	arr = (int *)realloc(arr,sizeof(int)*index);
 
 	return arr;
 }
