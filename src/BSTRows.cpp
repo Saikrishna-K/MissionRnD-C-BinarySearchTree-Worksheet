@@ -31,7 +31,63 @@ struct node{
 
 
 
+void height(struct node *root, int index, int *max)
+{
+	index++;
+	
+	if (root->left != NULL)  height(root->left, index, max);
+
+	if (root->right != NULL) height(root->right, index, max);
+	
+    if (*max< index) *max = index;
+
+}
+
+
+void nextLevel(struct node *root, int *arr, int *index, int level, int curlevel)
+{
+	if (curlevel == level){// if specified level met , copy that value into the array
+		arr[(*index)++] = root->data;		
+		return;
+	}
+
+	if (root->right != NULL)	nextLevel(root->right, arr, index, level, curlevel + 1);
+	if (root->left != NULL)		nextLevel(root->left, arr, index, level, curlevel + 1);
+
+}
+
+
+
+
 int* BSTRighttoLeftRows(struct node* root)
 {
-    return NULL;
+
+	if (root == NULL) return NULL;
+
+   int index = 0, maxLevel = 1, *arr, i, size = 1;
+	
+   height(root, index, &maxLevel);// First find the max height of the tree
+	
+	if (maxLevel > 1){ // count the max number of nodes for a tree of height calculated above
+
+	    for (i = 0; i <maxLevel; i++)
+		{
+			size *= 2;
+		}
+		size--;
+    }
+
+	
+	arr = (int *)calloc(size, sizeof(int)); // allocate memory for maximum number of nodes for a tree of height calculated above
+
+
+	index = 0;
+
+	// for each level, add the node values to array
+	for (i = 0; i < maxLevel; i++)
+	{
+		nextLevel(root, arr, &index, i, 0);
+	}
+
+	return arr;
 }
